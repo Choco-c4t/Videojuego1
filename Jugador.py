@@ -26,6 +26,7 @@ class Jugador:
         self.x = max(self.radio, min(ANCHO - self.radio, self.x))
         self.y = max(self.radio, min(ALTO - self.radio, self.y))
 
+    #con barra espaciadora
     def disparar(self): #coord del mouse
         mx,my = pygame.mouse.get_pos()
         dx = mx -self.x
