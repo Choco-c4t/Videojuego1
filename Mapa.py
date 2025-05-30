@@ -40,16 +40,6 @@ def es_pared(fila, columna, nivel_actual):
             return nivel[fila][columa]== PARED
     return True 
 
-def obtener_posiciones(codigo, nivel_actual):
-    posiciones = []
-    for fila in range(FILAS):
-        for columna in range(COLUMNAS):
-            if niveles[nivel_actual][fila][columna] == codigo:
-                x = columna * TAM_CELDA + TAM_CELDA // 2
-                y = fila * TAM_CELDA + TAM_CELDA // 2
-                posiciones.append((x, y))
-    return posiciones
-
 #git cloe
 #git add
 #git push logearse
