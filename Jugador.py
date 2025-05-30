@@ -36,11 +36,14 @@ class Jugador:
         dy = dy / distancia
         self.balas.append(Bala(self.x, self.y, dx, dy))
     
+    
     def actualizar_balas(self):
+        nuevas_balas = []
         for bala in self.balas:
-            bala.actualizar()
-            if bala.fuera_de_pantalla():
-                self.balas.remove(bala)
+             bala.actualizar()
+             if not bala.fuera_de_pantalla():
+                  nuevas_balas.append(bala)
+        self.balas = nuevas_balas
 
 
     def recibir_daño(self, cantidad):
