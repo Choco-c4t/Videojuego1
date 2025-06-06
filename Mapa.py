@@ -6,6 +6,15 @@ INICIO_JUGADOR = 3
 INICIO_ENEMIGO = 4
 PUERTA = 5 
 
+def matriz_vacia (filas, columna, valor = VACIO):
+    matriz = []
+    for fila in range(filas):
+        nueva_fila = []
+        for columna in range(columnas):
+            nueva_fila.append(valor)
+        matriz.append(nueva_fila)
+    return matriz
+
 class Mapa:
     def __init__(self):
         self.niveles = self.crear_niveles()
@@ -21,11 +30,11 @@ class Mapa:
             niveles.append(nivel)
 
         return niveles
-
+    
     def crear_nivel_normal(self, i):
         filas = 15
         columnas = 20
-        nivel = [[VACIO for _ in range(columnas)] for _ in range(filas)]
+        nivel = matriz_vacia(fila, columna,valor)
 
         # Bordes
         for f in range(filas):
