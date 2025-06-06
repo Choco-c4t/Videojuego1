@@ -67,7 +67,7 @@ class Mapa:
     def crear_nivel_jefe(self, i):
         filas = 20
         columnas = 25
-        nivel = [[VACIO for _ in range(columnas)] for _ in range(filas)]
+        nivel = matriz_vacia(fila, columna,valor)
 
         for f in range(filas):
             for c in range(columnas):
