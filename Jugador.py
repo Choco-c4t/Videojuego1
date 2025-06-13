@@ -19,7 +19,21 @@ class Jugador:
         self.invencible=True
 
     def rev_invenci(self):
-        if 
+        if self.invencible:
+            self.invincible_time -= pygame.time.get_ticks()
+            if self.invincible_time <= 0:
+                self.invincible = False
+        # Actualiza la posición del jugador
+        self.rect.x += 1
+        if self.rect.right > screen_width:
+            self.rect.right = screen_width
+        # Dibuja el jugador
+        screen.blit(self.image, self.rect)
+
+    def make_invincible(self):
+        self.invincible = True
+        self.invincible_time = self.invincible_duration
+
 
     def mover(self, teclas):
         if teclas[pygame.K_w]:
