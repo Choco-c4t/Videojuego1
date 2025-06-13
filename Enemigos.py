@@ -55,6 +55,11 @@ class EnemigoBase:
         # Barra de vida
         pygame.draw.rect(pantalla, ROJO, (self.x - 20, self.y - 30, 40, 5))
         pygame.draw.rect(pantalla, VERDE, (self.x - 20, self.y - 30, 40 * (self.vida/self.vida_maxima), 5))
+    
+    def dibujar_minions(self,pantalla):
+        pass
+    def dibujar_balas(self,pantalla):
+        pass
 
 
 class EnemigoDispara(EnemigoBase):
@@ -164,6 +169,9 @@ class EnemigoInvocador(EnemigoBase):
         for minion in self.minions:
             minion.dibujar(pantalla)
             minion.dibujar_balas(pantalla)
+    
+    def dibujar_balas(self,pantalla):
+        pass
 
 
 class MinionColision(EnemigoBase):
@@ -238,6 +246,5 @@ class MinionDispara(MinionColision):
     def dibujar_balas(self, pantalla):
         for bala in self.balas:
             bala.dibujar(pantalla)
-
 
 
