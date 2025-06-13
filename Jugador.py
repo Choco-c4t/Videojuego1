@@ -18,6 +18,9 @@ class Jugador:
     def ser_invencible(self,miliseg=10000):
         self.invencible=True
 
+    def rev_invenci(self):
+        if 
+
     def mover(self, teclas):
         if teclas[pygame.K_w]:
             self.y -= self.velocidad
