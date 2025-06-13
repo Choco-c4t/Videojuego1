@@ -13,6 +13,10 @@ class Jugador:
         self.vida_maxima = 100
         self.sprite = SPRITE_JUGADOR
         self.direccion = "derecha"  # Puede ser: "arriba", "abajo", "izquierda", "derecha"
+        self.invencible=False
+
+    def ser_invencible(self,miliseg=10000):
+        self.invencible=True
 
     def mover(self, teclas):
         if teclas[pygame.K_w]:
