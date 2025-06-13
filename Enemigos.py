@@ -86,7 +86,7 @@ class EnemigoDispara(EnemigoBase):
         for bala in self.balas[:]:
             bala.actualizar()
             if bala.verificar_colision(jugador):
-                jugador.recibir_daño(10)  # O la cantidad que quieras
+                jugador.recibir_daño(10) 
                 self.balas.remove(bala)
                 continue
 
