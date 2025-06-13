@@ -137,10 +137,9 @@ class Game:
 
         for enemigo in self.enemigos:
             enemigo.dibujar(self.pantalla)
-            if isinstance(enemigo, EnemigoDispara):
-                enemigo.dibujar_balas(self.pantalla)
-            if isinstance(enemigo, EnemigoInvocador):
-                enemigo.dibujar_minions(self.pantalla)
+            enemigo.dibujar_balas(self.pantalla)
+            enemigo.dibujar_minions(self.pantalla)
+        
 
         for bala in self.jugador.balas:
             bala.dibujar(self.pantalla)
