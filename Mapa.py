@@ -6,18 +6,18 @@ INICIO_JUGADOR = 3
 INICIO_ENEMIGO = 4
 PUERTA = 5 
 
-def matriz_vacia (filas, columna, valor = VACIO):
-    matriz = []
-    for fila in range(filas):
-        nueva_fila = []
-        for columna in range(columnas):
-            nueva_fila.append(valor)
-        matriz.append(nueva_fila)
-    return matriz
-
 class Mapa:
     def __init__(self):
         self.niveles = self.crear_niveles()
+
+    def matriz_vacia(self, filas, columnas, valor=VACIO):
+        matriz = []
+        for fila in range(filas):
+            nueva_fila = []
+            for columna in range(columnas):
+                nueva_fila.append(valor)
+            matriz.append(nueva_fila)
+        return matriz
 
     def crear_niveles(self):
         niveles = []
@@ -34,7 +34,7 @@ class Mapa:
     def crear_nivel_normal(self, i):
         filas = 15
         columnas = 20
-        nivel = matriz_vacia(fila, columna,valor)
+        nivel = self.matriz_vacia(filas, columnas)
 
         # Bordes
         for f in range(filas):
@@ -63,11 +63,10 @@ class Mapa:
 
         return nivel
 
-
     def crear_nivel_jefe(self, i):
         filas = 20
         columnas = 25
-        nivel = matriz_vacia(fila, columna,valor)
+        nivel = self.matriz_vacia(filas, columnas)
 
         for f in range(filas):
             for c in range(columnas):
@@ -79,7 +78,6 @@ class Mapa:
         nivel[filas // 2][columnas // 2] = INICIO_ENEMIGO
 
         nivel[0][columnas // 2] = PUERTA
-
 
         for p in range(10 + i):
             f = (p * 2 + i) % (filas - 2)
@@ -100,5 +98,7 @@ class Mapa:
             if 0 <= fila < len(nivel) and 0 <= columna < len(nivel[fila]):
                 return nivel[fila][columna] == PARED
         return True
+
+
 
 
