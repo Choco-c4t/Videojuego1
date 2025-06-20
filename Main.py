@@ -10,7 +10,7 @@ class Game:
     def __init__(self):
         pygame.init()
         self.pantalla = pygame.display.set_mode((ANCHO, ALTO))
-        pygame.display.set_caption("Dungeon Game")
+        pygame.display.set_caption("Crypta Eterna")
         self.reloj = pygame.time.Clock()
         self.mapa = Mapa()
         self.jugador = None
