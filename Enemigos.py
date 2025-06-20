@@ -9,7 +9,7 @@ class EnemigoBase:
         self.y = y
         self.vida = 100
         self.vida_maxima = 100
-        self.velocidad = 1.5
+        self.velocidad = 1.3
         self.daño = 10
         self.sprite = SPRITE_ENEMIGO_BASE
         self.color = ROJO  
