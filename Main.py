@@ -13,36 +13,38 @@ class Game:
         pygame.display.set_caption("Dungeon Game")
         self.reloj = pygame.time.Clock()
         self.mapa = Mapa()
-        self.nivel_actual = 0
         self.jugador = None
+        self.nivel_actual = 0
         self.enemigos = []
         self.puerta_abierta = False
         self.spike_damage_cooldown = 30
         self.spike_damage_timer = 0
-
-        # Fuente para mostrar texto
         self.fuente = pygame.font.SysFont(None, 30)
         self.mensaje = ""
-        self.mensaje_tiempo = 0 
-
+        self.mensaje_tiempo = 0
+        self.robo_vida_activo = False
         self.cargar_nivel()
 
     def mostrar_mensaje(self, texto, tiempo_frames=120):
-        self.mensaje = texto 
+        self.mensaje = texto
         self.mensaje_tiempo = tiempo_frames
 
     def cargar_nivel(self):
         nivel_data = self.mapa.niveles[self.nivel_actual]
         self.enemigos = []
-        self.jugador = None
         self.puerta_abierta = False
-
         for f, fila in enumerate(nivel_data):
             for c, celda in enumerate(fila):
                 x = c * TAM_CELDA + TAM_CELDA // 2
-                y = f * TAM_CELDA + TAM_CELDA // 2
+                y = f * TAM_CELDA + TAM_CELDA // 2  
                 if celda == INICIO_JUGADOR:
-                    self.jugador = Jugador(x, y)
+                    if self.jugador is None: # crear jugador
+                        self.jugador = Jugador(x, y)
+                    else: #si existe, cambiar pos
+                        self.jugador.x = x
+                        self.jugador.y = y
+                        self.jugador.rect.center = (x, y)
+                    
                 elif celda == INICIO_ENEMIGO:
                     if (self.nivel_actual + 1) % 5 == 0:
                         self.enemigos.append(JefeFinal(x, y))
@@ -59,18 +61,23 @@ class Game:
         teclas = pygame.key.get_pressed()
         self.jugador.mover(teclas)
         self.jugador.actualizar_balas(self.enemigos)
+
         enemigos_activos = []
         for enemigo in self.enemigos:
             enemigo.actualizar(self.jugador)
             if not enemigo.esta_muerto():
                 enemigos_activos.append(enemigo)
         self.enemigos = enemigos_activos
+
+        self.jugador.robar_vida(self.enemigos)
+
         if not self.enemigos and not self.puerta_abierta:
             self.puerta_abierta = True
             self.mostrar_mensaje("¡Puerta abierta!")
 
         fila, columna = self.mapa.obtener_celda(int(self.jugador.x), int(self.jugador.y))
         nivel = self.mapa.niveles[self.nivel_actual]
+        
         if 0 <= fila < len(nivel) and 0 <= columna < len(nivel[0]):
             tile = nivel[fila][columna]
             if tile == PUERTA and self.puerta_abierta:
@@ -80,7 +87,7 @@ class Game:
                     self.mostrar_mensaje(f"Nivel {self.nivel_actual + 1} cargado")
                 else:
                     self.mostrar_mensaje("¡Has ganado el juego!", tiempo_frames=180)
-                    pygame.time.delay(3000)  # Espera 3 segundos para que el mensaje se vea
+                    pygame.time.delay(3000)
                     pygame.quit()
                     exit()
 
@@ -117,12 +124,13 @@ class Game:
 
     def dibujar(self):
         self.pantalla.fill(GRIS)
-
         nivel = self.mapa.niveles[self.nivel_actual]
+        
         for f, fila in enumerate(nivel):
             for c, celda in enumerate(fila):
                 x = c * TAM_CELDA
                 y = f * TAM_CELDA
+                
                 if celda == PICO:
                     punto1 = (x + TAM_CELDA // 2, y + 5)
                     punto2 = (x + 5, y + TAM_CELDA - 5)
@@ -139,7 +147,6 @@ class Game:
             enemigo.dibujar(self.pantalla)
             enemigo.dibujar_balas(self.pantalla)
             enemigo.dibujar_minions(self.pantalla)
-        
 
         for bala in self.jugador.balas:
             bala.dibujar(self.pantalla)
@@ -161,6 +168,11 @@ class Game:
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_SPACE:
                     self.jugador.disparar()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_r: 
+                    self.jugador.activar_robo_vida()
+                elif evento.key == pygame.K_SPACE:
+                    self.jugador.disparar() 
 
     def ejecutar(self):
         while True:
