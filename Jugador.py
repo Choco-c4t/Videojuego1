@@ -50,7 +50,7 @@ class Jugador:
         return self.rect.colliderect(enemigo.rect)
 
     def disparar(self):
-        if len(self.balas) < 3:  # Max 3 balas
+        if len(self.balas) <= 5:  # Max 5 balas
             if self.direccion == "arriba":
                 self.balas.append(Bala(self.x, self.y, 0, -1))
             elif self.direccion == "abajo":
