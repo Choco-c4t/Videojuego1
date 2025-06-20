@@ -92,6 +92,13 @@ class Mapa:
         columna = x // TAM_CELDA
         return fila, columna
 
+    def es_pared(self, fila, columna, nivel_actual):
+        if 0 <= nivel_actual < len(self.niveles):
+            nivel = self.niveles[nivel_actual]
+            if 0 <= fila < len(nivel) and 0 <= columna < len(nivel[fila]):
+                return nivel[fila][columna] == PARED
+        return True
+
 
 
 
