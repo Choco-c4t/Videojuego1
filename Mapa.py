@@ -47,8 +47,10 @@ class Mapa:
 
         # Puerta en cima derecha
         nivel[0][columnas // 2] = PUERTA
-
-        for e in range(2 + i % 3):
+        segment_index = i % 5
+        num_enemigos = 2 + segment_index
+        
+        for e in range(num_enemigos):
             f = 3 + e
             c = 5 + (i + e) % 10
             if f < filas and c < columnas:
