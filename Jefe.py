@@ -29,7 +29,7 @@ class JefeFinal(EnemigoBase):
             self.disparos_recibidos += 1
             if self.disparos_recibidos >= 10:
                 self.vulnerable = True
-                self.tiempo_vulnerable = 460  # 4 seg
+                self.tiempo_vulnerable = 460
 
     def disparar(self, objetivo_x, objetivo_y):
         dx = objetivo_x - self.x
@@ -62,7 +62,6 @@ class JefeFinal(EnemigoBase):
             self.disparar(jugador.x, jugador.y)
             self.contador_disparo = 0
 
-
         for bala in self.balas[:]:
             bala.actualizar()
             if bala.fuera_de_pantalla():
@@ -70,8 +69,7 @@ class JefeFinal(EnemigoBase):
             elif bala.rect.colliderect(jugador.rect):
                 jugador.recibir_daño(10)
                 self.balas.remove(bala)
-                
-        # Limitar
+
         self.x = max(self.width//2, min(800 - self.width//2, self.x))
         self.y = max(self.height//2, min(600 - self.height//2, self.y))
 
