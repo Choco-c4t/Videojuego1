@@ -1,6 +1,6 @@
 import pygame
 from Enemigos import EnemigoBase
-from config import SPRITE_JEFE, ROJO, VERDE
+from config import ROJO, VERDE
 from bala import Bala
 
 class JefeFinal(EnemigoBase):
@@ -10,7 +10,6 @@ class JefeFinal(EnemigoBase):
         self.vida_maxima = 500
         self.velocidad = 1.2
         self.daño = 20
-        self.sprite = SPRITE_JEFE
         self.disparos_recibidos = 0
         self.vulnerable = False
         self.tiempo_vulnerable = 0
