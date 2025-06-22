@@ -11,21 +11,20 @@ class Jugador:
         self.balas = []
         self.vida = 100
         self.vida_maxima = 100
-        self.sprite = SPRITE_JUGADOR
         self.direccion = "derecha"
         self.width = 40 
         self.height = 40
         self.rect = pygame.Rect(self.x - self.width // 2, self.y - self.height // 2, self.width, self.height)
         self.robo_vida_activo = False
-        self.tiempo_robo_vida = 0  # Rango
+        self.tiempo_robo_vida = 0 
         self.duracion_robo = 300
         self.radio_robo_vida = 20
-        self.color_normal = AZUL  # Color normal del jugador
-        self.color_poder = ROSADO  # Color cuando tiene el poder
-        self.color_actual = self.color_normal  # Color actual
+        self.color_normal = AZUL 
+        self.color_poder = ROSADO 
+        self.color_actual = self.color_normal 
         self.robo_vida_activo = False
         self.tiempo_poder = 0
-        self.duracion_poder = 300  # 5 segundos a 60 FPS
+        self.duracion_poder = 300  
 
     def mover(self, teclas):
 
@@ -44,7 +43,6 @@ class Jugador:
             self.direccion = "derecha"
 
         self.rect.center = (self.x, self.y)
-        
         if self.x < self.width // 2:
             self.x = self.width // 2
         if self.x > ANCHO - self.width // 2:
@@ -54,18 +52,14 @@ class Jugador:
         if self.y > ALTO - self.height // 2:
             self.y = ALTO - self.height // 2
 
-
-
     def verificar_colision_enemigo(self, enemigo):
         return self.rect.colliderect(enemigo.rect)
 
     def disparar(self):
         if len(self.balas) < 3:
-            # Curación al disparar si el poder está activo
             if self.robo_vida_activo:
                 self.vida = min(self.vida + 5, self.vida_maxima)
             
-            # Lógica normal de disparo
             if self.direccion == "arriba":
                 self.balas.append(Bala(self.x, self.y, 0, -1))
             elif self.direccion == "abajo":
@@ -98,8 +92,6 @@ class Jugador:
     def dibujar(self, pantalla):
         color = self.color_poder if self.robo_vida_activo else self.color_normal
         pygame.draw.rect(pantalla, color, self.rect)
-        
-        # Barra de vida
         pygame.draw.rect(pantalla, ROJO, (self.x - 20, self.y - 30, 40, 5))
         pygame.draw.rect(pantalla, VERDE, (self.x - 20, self.y - 30, 40 * (self.vida / self.vida_maxima), 5))
     
