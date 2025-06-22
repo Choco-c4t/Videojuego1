@@ -15,6 +15,7 @@ MARRON = (128, 0, 0)
 GRIS = (192, 192, 192)
 NARANJA = (255, 165, 0)
 MORADO = (160, 32, 240)
+ROSADO = (248, 131, 121)
 
 
 SPRITE_JUGADOR = None #pygame.image.load("assets/jugador.png").convert_alpha()
