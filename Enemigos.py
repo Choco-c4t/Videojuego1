@@ -19,7 +19,6 @@ class EnemigoBase:
         self.rect = pygame.Rect(self.x - self.width//2, self.y - self.height//2, self.width, self.height)
 
     def mover_hacia_jugador(self, jugador_x, jugador_y):
-        # Calcular dirección
         dx = jugador_x - self.x
         dy = jugador_y - self.y
         distancia = max(1, (dx**2 + dy**2)**0.5)
@@ -69,7 +68,7 @@ class EnemigoDispara(EnemigoBase):
         self.balas = []
         self.tiempo_entre_disparos = 90  
         self.contador_disparo = 0
-        self.cooldown_colision = 60  #1 seg
+        self.cooldown_colision = 60
         self.tiempo_cooldown = 0
         self.width = 30
         self.height = 30
