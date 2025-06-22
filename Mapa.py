@@ -1,3 +1,4 @@
+import random
 TAM_CELDA = 40
 VACIO = 0
 PARED = 1
@@ -5,6 +6,7 @@ PICO = 2
 INICIO_JUGADOR = 3
 INICIO_ENEMIGO = 4
 PUERTA = 5 
+ROBO_VIDA = 6
 
 class Mapa:
     def __init__(self):
@@ -47,9 +49,10 @@ class Mapa:
 
         # Puerta en cima derecha
         nivel[0][columnas // 2] = PUERTA
+
         segment_index = i % 5
-        num_enemigos = 2 + segment_index
-        
+        num_enemigos = 1 + segment_index
+
         for e in range(num_enemigos):
             f = 3 + e
             c = 5 + (i + e) % 10
@@ -62,6 +65,16 @@ class Mapa:
             if f < filas and c < columnas:
                 if nivel[f][c] == VACIO:
                     nivel[f][c] = PICO
+
+        posiciones_vacias = []
+        for f in range(1, filas-1):
+            for c in range(1, columnas-1):
+                if nivel[f][c] == VACIO:
+                    posiciones_vacias.append((f, c))
+        
+        if posiciones_vacias:  # Si hay posiciones vacías
+            f, c = random.choice(posiciones_vacias)
+            nivel[f][c] = ROBO_VIDA
 
         return nivel
 
@@ -87,19 +100,22 @@ class Mapa:
             if nivel[f][c] == VACIO:
                 nivel[f][c] = PICO
 
+        posiciones_vacias = []
+        for f in range(1, filas-1):
+            for c in range(1, columnas-1):
+                if nivel[f][c] == VACIO:
+                    posiciones_vacias.append((f, c))
+        
+        if posiciones_vacias:  # Si hay posiciones vacías
+            f, c = random.choice(posiciones_vacias)
+            nivel[f][c] = ROBO_VIDA
+
         return nivel
 
     def obtener_celda(self, x, y):
         fila = y // TAM_CELDA
         columna = x // TAM_CELDA
         return fila, columna
-
-    def es_pared(self, fila, columna, nivel_actual):
-        if 0 <= nivel_actual < len(self.niveles):
-            nivel = self.niveles[nivel_actual]
-            if 0 <= fila < len(nivel) and 0 <= columna < len(nivel[fila]):
-                return nivel[fila][columna] == PARED
-        return True
 
 
 
