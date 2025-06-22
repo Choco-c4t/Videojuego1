@@ -38,16 +38,13 @@ class Mapa:
         columnas = 20
         nivel = self.matriz_vacia(filas, columnas)
 
-        # Bordes
         for f in range(filas):
             for c in range(columnas):
                 if f == 0 or f == filas - 1 or c == 0 or c == columnas - 1:
                     nivel[f][c] = PARED
 
-        # Inicio del jugador
         nivel[filas - 2][2 + (i % 4)] = INICIO_JUGADOR
 
-        # Puerta en cima derecha
         nivel[0][columnas // 2] = PUERTA
 
         segment_index = i % 5
@@ -72,7 +69,7 @@ class Mapa:
                 if nivel[f][c] == VACIO:
                     posiciones_vacias.append((f, c))
         
-        if posiciones_vacias:  # Si hay posiciones vacías
+        if posiciones_vacias:
             f, c = random.choice(posiciones_vacias)
             nivel[f][c] = ROBO_VIDA
 
@@ -106,7 +103,7 @@ class Mapa:
                 if nivel[f][c] == VACIO:
                     posiciones_vacias.append((f, c))
         
-        if posiciones_vacias:  # Si hay posiciones vacías
+        if posiciones_vacias:
             f, c = random.choice(posiciones_vacias)
             nivel[f][c] = ROBO_VIDA
 
