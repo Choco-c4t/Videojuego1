@@ -29,18 +29,6 @@ class Game:
         pygame.mixer.music.set_volume(0.3)
         self.cargar_nivel()
 
-    def inicializar_juego(self):
-        self.nivel_actual = 0
-        self.jugador = None
-        self.enemigos = []
-        self.puerta_abierta = False
-        self.spike_timer = 0
-        self.mensaje = ""
-        self.mensaje_tiempo = 0
-        self.robo_vida_x = None
-        self.robo_vida_y = None
-        self.cargar_nivel()
-
     def mostrar_mensaje(self, texto, tiempo_frames=120):
         self.mensaje = texto
         self.mensaje_tiempo = tiempo_frames
