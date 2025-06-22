@@ -11,7 +11,6 @@ class EnemigoBase:
         self.vida_maxima = 100
         self.velocidad = 1.5
         self.daño = 10
-        self.sprite = SPRITE_ENEMIGO_BASE
         self.color = ROJO  
         self.cooldown_colision = 60
         self.tiempo_cooldown = 0 
@@ -35,11 +34,11 @@ class EnemigoBase:
 
     def verificar_colision_jugador(self, jugador):
         if self.rect.colliderect(jugador.rect):
-            if self.tiempo_cooldown == 0:
+            if self.tiempo_cooldown <= 0:
                 jugador.recibir_daño(self.daño)
                 self.tiempo_cooldown = self.cooldown_colision
-            return True
-        return False
+        if self.tiempo_cooldown > 0:
+            self.tiempo_cooldown -= 1
 
     def recibir_daño(self, cantidad):
         self.vida -= cantidad
@@ -47,11 +46,8 @@ class EnemigoBase:
     def esta_muerto(self):
         return self.vida <= 0
 
+
     def dibujar(self, pantalla):
-        if self.sprite:
-            sprite_escalado = pygame.transform.scale(self.sprite, (self.radio*2, self.radio*2))
-            pantalla.blit(sprite_escalado, (self.x - self.radio, self.y - self.radio))
-        else:
             pygame.draw.rect(pantalla,self.color,self.rect)
             pygame.draw.rect(pantalla, ROJO, (self.x - 20, self.y - 30, 40, 5))
             pygame.draw.rect(pantalla, VERDE, (self.x - 20, self.y - 30, 40 * (self.vida/self.vida_maxima), 5))
@@ -69,7 +65,6 @@ class EnemigoDispara(EnemigoBase):
         self.vida = 60
         self.vida_maxima = 60
         self.velocidad = 1.0
-        self.sprite = SPRITE_ENEMIGO_DISPARA
         self.color = NARANJA
         self.balas = []
         self.tiempo_entre_disparos = 90  
@@ -120,7 +115,6 @@ class EnemigoInvocador(EnemigoBase):
         self.vida = 80
         self.vida_maxima = 80
         self.velocidad = 0.8
-        self.sprite = SPRITE_ENEMIGO_INVOCADOR
         self.color = MORADO
         self.minions = []
         self.tiempo_entre_invocaciones = 200
@@ -130,7 +124,7 @@ class EnemigoInvocador(EnemigoBase):
         self.rect = pygame.Rect(x - self.width//2, y - self.height//2, self.width, self.height)
 
     def actualizar(self, jugador):
-        self.mover_hacia_jugador(jugador.x, jugador.y)
+        super().actualizar(jugador)
 
         if self.tiempo_cooldown > 0:
             self.tiempo_cooldown -= 1
@@ -174,7 +168,6 @@ class MinionColision(EnemigoBase):
         self.vida = 40
         self.vida_maxima = 40
         self.velocidad = 1.8
-        self.sprite = SPRITE_MINION
         self.color = AMARILLO
         self.cooldown_colision = 60
         self.tiempo_cooldown = 0 
@@ -195,7 +188,7 @@ class MinionColision(EnemigoBase):
 class MinionDispara(MinionColision):
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.color = AZUL
+        self.color = NARANJA
         self.balas = []
         self.tiempo_entre_disparos = 120
         self.contador_disparo = 0
@@ -203,7 +196,7 @@ class MinionDispara(MinionColision):
         self.rect = pygame.Rect(x - self.width//2, y - self.height//2, self.width, self.height)
 
     def actualizar(self, jugador):
-        self.mover_hacia_jugador(jugador.x, jugador.y)
+        super().actualizar(jugador)
 
         if self.tiempo_cooldown > 0:
             self.tiempo_cooldown -= 1
