@@ -76,12 +76,7 @@ class JefeFinal(EnemigoBase):
         self.y = max(self.height//2, min(600 - self.height//2, self.y))
 
     def dibujar(self, pantalla):
-        if self.sprite:
-            sprite_escalado = pygame.transform.scale(self.sprite, (self.width, self.height))
-            pantalla.blit(sprite_escalado, (self.x - self.width//2, self.y - self.height//2))
-        else:
-            pygame.draw.rect(pantalla, (255, 0, 255), self.rect)
-        
+        pygame.draw.rect(pantalla, (255, 0, 255), self.rect)
         pygame.draw.rect(pantalla, ROJO, (self.x - 40, self.y - 50, 80, 8))
         pygame.draw.rect(pantalla, VERDE, (self.x - 40, self.y - 50, 80 * (self.vida / self.vida_maxima), 8))
         
