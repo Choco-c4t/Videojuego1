@@ -6,8 +6,8 @@ from bala import Bala
 class JefeFinal(EnemigoBase):
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.vida = 1000
-        self.vida_maxima = 1000
+        self.vida = 500
+        self.vida_maxima = 500
         self.velocidad = 1.2
         self.daño = 20
         self.sprite = SPRITE_JEFE
@@ -28,7 +28,7 @@ class JefeFinal(EnemigoBase):
             self.vida -= cantidad
         else:
             self.disparos_recibidos += 1
-            if self.disparos_recibidos >= 20:
+            if self.disparos_recibidos >= 10:
                 self.vulnerable = True
                 self.tiempo_vulnerable = 460  # 4 seg
 
@@ -87,7 +87,7 @@ class JefeFinal(EnemigoBase):
         pygame.draw.rect(pantalla, VERDE, (self.x - 40, self.y - 50, 80 * (self.vida / self.vida_maxima), 8))
         
         for bala in self.balas:
-            bala.dibujar(pantalla) 
+            bala.dibujar(pantalla)
 
 
 
