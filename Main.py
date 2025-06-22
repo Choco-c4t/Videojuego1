@@ -10,21 +10,23 @@ class Game:
     def __init__(self):
         pygame.init()
         self.pantalla = pygame.display.set_mode((ANCHO, ALTO))
-        pygame.display.set_caption("Crypta Eterna")
+        pygame.display.set_caption("Runas del Cubo")
         self.reloj = pygame.time.Clock()
         self.mapa = Mapa()
         self.jugador = None
         self.nivel_actual = 0
         self.enemigos = []
         self.puerta_abierta = False
-        self.fuente = pygame.font.SysFont(None, 30)
+        self.fuente = pygame.font.Font('assets\sburbits.ttf', 40)
         self.mensaje = ""
         self.mensaje_tiempo = 0
         self.robo_vida_x = None
         self.robo_vida_y = None
         self.estado = "menu"
-        self.spike_cooldown = 60  # 1 segundo a 60 FPS
+        self.spike_cooldown = 60
         self.spike_timer = 0
+        self.musica_actual = None
+        pygame.mixer.music.set_volume(0.3)
         self.cargar_nivel()
 
     def inicializar_juego(self):
@@ -80,20 +82,19 @@ class Game:
                             self.enemigos.append(EnemigoInvocador(x, y))
 
     def actualizar(self):
-        if self.estado == "juego":
+        if self.estado == "menu":
+            self.reproducir_musica(cancion_menu)       
+        elif self.estado == "juego":
+            self.reproducir_musica(cancion_nivel)
             teclas = pygame.key.get_pressed()
-            
-            # Guardar posición previa para colisiones
+
             x_prev, y_prev = self.jugador.x, self.jugador.y
             
-            # Mover jugador
             self.jugador.mover(teclas)
             
-            # Verificar colisión con pinchos
             fila, columna = self.mapa.obtener_celda(self.jugador.x, self.jugador.y)
             if 0 <= fila < len(self.mapa.niveles[self.nivel_actual]) and 0 <= columna < len(self.mapa.niveles[self.nivel_actual][0]):
                 if self.mapa.niveles[self.nivel_actual][fila][columna] == PICO:
-                    # Revertir movimiento y quitar vida
                     self.jugador.x, self.jugador.y = x_prev, y_prev
                     self.jugador.rect.center = (self.jugador.x, self.jugador.y)
                     if self.spike_timer <= 0:
@@ -105,7 +106,6 @@ class Game:
                 else:
                     self.spike_timer = 0 
 
-            # Verificar objeto robo vida
             if (self.robo_vida_x is not None and 
                 ((self.jugador.x - self.robo_vida_x)**2 + (self.jugador.y - self.robo_vida_y)**2)**0.5 < 30):
                 self.jugador.activar_poder()
@@ -113,7 +113,6 @@ class Game:
                 self.robo_vida_y = None
                 self.mostrar_mensaje("¡Poder de robo de vida activado!", 60)
 
-            # Actualizar balas y enemigos
             self.jugador.actualizar_balas(self.enemigos)
             self.jugador.actualizar_poder()
 
@@ -139,12 +138,13 @@ class Game:
                         self.cargar_nivel()
                         self.mostrar_mensaje(f"Nivel {self.nivel_actual + 1} cargado")
                     else:
-                        self.mostrar_mensaje("¡Has ganado el juego!", tiempo_frames=180)
                         self.estado = "resultado"
+                        if self.estado == "resultado":
+                            self.reproducir_musica(cancion_perder)
 
             if self.jugador.esta_muerto():
-                self.mostrar_mensaje("¡Has perdido!", tiempo_frames=180)
                 self.estado = "resultado"
+                self.reproducir_musica(cancion_perder)
 
         if self.mensaje_tiempo > 0:
             self.mensaje_tiempo -= 1
@@ -153,26 +153,22 @@ class Game:
 
     def dibujar_menu(self):
         self.pantalla.fill(NEGRO)
-        titulo = self.fuente.render("CRYPTA ETERNA", True, BLANCO)
-        self.pantalla.blit(titulo, (ANCHO//2 - titulo.get_width()//2, 200))
-        instrucciones = self.fuente.render("Presiona ENTER para JUGAR", True, BLANCO)
-        self.pantalla.blit(instrucciones, (ANCHO//2 - instrucciones.get_width()//2, 300))
+        self.pantalla.blit(imagen_menu, (ANCHO//2 - imagen_menu.get_width()//2, 30))
+        instrucciones = self.fuente.render("Presiona ENTER para JUGAR", True, DORADO)
+        self.pantalla.blit(instrucciones, (ANCHO//2 - instrucciones.get_width()//2, 500))
         pygame.display.flip()
 
     def dibujar_resultado(self):
         self.pantalla.fill(NEGRO)
         if self.jugador.esta_muerto():
-            texto = self.fuente.render("¡HAS PERDIDO!", True, ROJO)
+            self.pantalla.blit(imagen_perder, (ANCHO//2 - imagen_perder.get_width()//2, 30))
+            nivel_texto = self.fuente.render(f"Llegaste al nivel {self.nivel_actual + 1}", True, DORADO)
+            self.pantalla.blit(nivel_texto, (ANCHO//2 - nivel_texto.get_width()//2, 250))
         else:
-            texto = self.fuente.render("¡GANASTE!", True, VERDE)
-        
-        nivel_texto = self.fuente.render(f"Llegaste al nivel {self.nivel_actual + 1}", True, BLANCO)
-        
-        self.pantalla.blit(texto, (ANCHO//2 - texto.get_width()//2, 200))
-        self.pantalla.blit(nivel_texto, (ANCHO//2 - nivel_texto.get_width()//2, 280))
-        
-        reiniciar_texto = self.fuente.render("Presiona R para reiniciar", True, BLANCO)
-        self.pantalla.blit(reiniciar_texto, (ANCHO//2 - reiniciar_texto.get_width()//2, 350))
+            self.pantalla.blit(imagen_ganar, (ANCHO//2 - imagen_ganar.get_width()//2, 30))
+
+        reiniciar_texto = self.fuente.render("Presiona R para reiniciar", True, DORADO)
+        self.pantalla.blit(reiniciar_texto, (ANCHO//2 - reiniciar_texto.get_width()//2, 500))
         pygame.display.flip()
 
     def dibujar(self):
@@ -182,60 +178,37 @@ class Game:
             self.pantalla.fill(GRIS)
             nivel = self.mapa.niveles[self.nivel_actual]
 
-            # Dibujar mapa
             for f, fila in enumerate(nivel):
                 for c, celda in enumerate(fila):
                     x = c * TAM_CELDA
                     y = f * TAM_CELDA
                     
                     if celda == PICO:
-                        # Dibujar pincho sólido (triángulo rojo con borde negro)
-                        pygame.draw.polygon(self.pantalla, (200, 0, 0), [
-                            (x + TAM_CELDA//2, y),
-                            (x, y + TAM_CELDA),
-                            (x + TAM_CELDA, y + TAM_CELDA)
-                        ])
-                        # Puntas del pincho (rojo brillante)
-                        pygame.draw.polygon(self.pantalla, (255, 50, 50), [
-                            (x + TAM_CELDA//2, y + 5),
-                            (x + 5, y + TAM_CELDA - 5),
-                            (x + TAM_CELDA - 5, y + TAM_CELDA - 5)
-                        ])
-                        # Borde
-                        pygame.draw.polygon(self.pantalla, NEGRO, [
-                            (x + TAM_CELDA//2, y),
-                            (x, y + TAM_CELDA),
-                            (x + TAM_CELDA, y + TAM_CELDA)
-                        ], 1)
+                        pygame.draw.polygon(self.pantalla, ROJO_OSCURO, [(x + TAM_CELDA//2, y),(x, y + TAM_CELDA),(x + TAM_CELDA, y + TAM_CELDA)])
+                        pygame.draw.polygon(self.pantalla, NEGRO, [(x + TAM_CELDA//2, y), (x, y + TAM_CELDA),(x + TAM_CELDA, y + TAM_CELDA)], 1)
                         
                     elif celda == PUERTA:
                         color = VERDE if self.puerta_abierta else MARRON
                         pygame.draw.rect(self.pantalla, color, (x + 5, y + 5, TAM_CELDA - 10, TAM_CELDA - 10))
 
-            # Dibujar objeto robo vida
             if self.robo_vida_x is not None and self.robo_vida_y is not None:
-                pygame.draw.circle(self.pantalla, MORADO, (int(self.robo_vida_x), int(self.robo_vida_y)), 15)
+                pygame.draw.circle(self.pantalla, ROSADO, (int(self.robo_vida_x), int(self.robo_vida_y)), 15)
                 pygame.draw.circle(self.pantalla, BLANCO, (int(self.robo_vida_x), int(self.robo_vida_y)), 10)
 
-            # Dibujar enemigos
             for enemigo in self.enemigos:
                 enemigo.dibujar(self.pantalla)
                 enemigo.dibujar_balas(self.pantalla)
                 enemigo.dibujar_minions(self.pantalla)
 
-            # Dibujar balas del jugador
             for bala in self.jugador.balas:
                 bala.dibujar(self.pantalla)
 
-            # Dibujar jugador
             self.jugador.dibujar(self.pantalla)
 
-            # Dibujar mensajes
             if self.mensaje:
                 texto = self.fuente.render(self.mensaje, True, BLANCO)
-                self.pantalla.blit(texto, (ANCHO//2 - texto.get_width()//2, 30))
+                self.pantalla.blit(texto, (ANCHO//2 - texto.get_width()//2, 550))
 
-            # Dibujar tiempo restante del poder
             if self.jugador.robo_vida_activo:
                 segundos = max(0, self.jugador.tiempo_poder // 60)
                 texto_poder = self.fuente.render(f"Poder: {segundos}s", True, BLANCO)
@@ -245,6 +218,12 @@ class Game:
 
         elif self.estado == "resultado":
             self.dibujar_resultado()
+
+    def reproducir_musica(self, ruta):
+        if self.musica_actual != ruta:
+            pygame.mixer.music.load(ruta)
+            pygame.mixer.music.play(-1)
+            self.musica_actual = ruta
 
     def manejar_eventos(self):
         for evento in pygame.event.get():
