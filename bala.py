@@ -7,8 +7,8 @@ class Bala:
         self.y = y
         self.dx = dx * 7 
         self.dy = dy * 7  
-        self.enemigo = enemigo  # True si es una bala enemiga
-        self.color = ROJO if enemigo else AZUL  # Rojo para enemigos, azul para jugador
+        self.enemigo = enemigo
+        self.color = ROJO if enemigo else AZUL
         self.width = 10
         self.height = 10
         self.rect = pygame.Rect(self.x - self.width//2, self.y - self.height//2, self.width, self.height)
