@@ -9,7 +9,7 @@ class EnemigoBase:
         self.y = y
         self.vida = 100
         self.vida_maxima = 100
-        self.velocidad = 1.3
+        self.velocidad = 1.5
         self.daño = 10
         self.sprite = SPRITE_ENEMIGO_BASE
         self.color = ROJO  
@@ -46,8 +46,6 @@ class EnemigoBase:
 
     def esta_muerto(self):
         return self.vida <= 0
-
-
 
     def dibujar(self, pantalla):
         if self.sprite:
@@ -180,7 +178,7 @@ class MinionColision(EnemigoBase):
         self.color = AMARILLO
         self.cooldown_colision = 60
         self.tiempo_cooldown = 0 
-        self.daño = 10 
+        self.daño = 5 
         self.width = 24
         self.height = 24
         self.rect = pygame.Rect(x - self.width//2, y - self.height//2, self.width, self.height)
@@ -235,4 +233,3 @@ class MinionDispara(MinionColision):
     def dibujar_balas(self, pantalla):
         for bala in self.balas:
             bala.dibujar(pantalla)
-
