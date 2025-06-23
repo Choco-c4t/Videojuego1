@@ -107,8 +107,7 @@ class Game:
                 else:
                     self.spike_timer = 0 
 
-            if (self.robo_vida_x is not None and 
-                ((self.jugador.x - self.robo_vida_x)**2 + (self.jugador.y - self.robo_vida_y)**2)**0.5 < 30):
+            if (self.robo_vida_x is not None and ((self.jugador.x - self.robo_vida_x)**2 + (self.jugador.y - self.robo_vida_y)**2)**0.5 < 30):
                 self.jugador.activar_poder()
                 self.robo_vida_x = None
                 self.robo_vida_y = None
