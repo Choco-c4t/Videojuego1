@@ -141,7 +141,7 @@ class Game:
                     else:
                         self.estado = "resultado"
                         if self.estado == "resultado":
-                            self.reproducir_musica(cancion_perder)
+                            self.reproducir_musica(cancion_victoria)
 
             if self.jugador.esta_muerto():
                 self.estado = "resultado"
