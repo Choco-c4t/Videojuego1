@@ -185,25 +185,15 @@ class Game:
             self.pantalla.fill(GRIS)
             nivel = self.mapa.niveles[self.nivel_actual]
 
-            # Dibujar mapa
+
             for f, fila in enumerate(nivel):
                 for c, celda in enumerate(fila):
                     x = c * TAM_CELDA
                     y = f * TAM_CELDA
                     
                     if celda == PICO:
-                        # Dibujar pincho sólido (triángulo rojo)
-                        pygame.draw.polygon(self.pantalla, ROJO_OSCURO, [
-                            (x + TAM_CELDA//2, y),
-                            (x, y + TAM_CELDA),
-                            (x + TAM_CELDA, y + TAM_CELDA)
-                        ])
-                        # borde negro)
-                        pygame.draw.polygon(self.pantalla, NEGRO, [
-                            (x + TAM_CELDA//2, y),
-                            (x, y + TAM_CELDA),
-                            (x + TAM_CELDA, y + TAM_CELDA)
-                        ], 1)
+                        pygame.draw.polygon(self.pantalla, ROJO_OSCURO, [(x + TAM_CELDA//2, y),(x, y + TAM_CELDA),(x + TAM_CELDA, y + TAM_CELDA)])
+                        pygame.draw.polygon(self.pantalla, NEGRO, [(x + TAM_CELDA//2, y),(x, y + TAM_CELDA),(x + TAM_CELDA, y + TAM_CELDA)], 1)
                         
                     elif celda == PUERTA:
                         color = VERDE if self.puerta_abierta else MARRON
