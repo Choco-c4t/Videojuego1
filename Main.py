@@ -23,7 +23,7 @@ class Game:
         self.robo_vida_x = None
         self.robo_vida_y = None
         self.estado = "menu"
-        self.spike_cooldown = 60  # 1 segundo a 60 FPS
+        self.spike_cooldown = 60 
         self.spike_timer = 0
         self.musica_actual = None
         pygame.mixer.music.set_volume(0.3)
@@ -88,18 +88,14 @@ class Game:
             self.reproducir_musica(cancion_nivel)
             teclas = pygame.key.get_pressed()
 
-            
-            # Guardar posición previa para colisiones
+
             x_prev, y_prev = self.jugador.x, self.jugador.y
             
-            # Mover jugador
             self.jugador.mover(teclas)
             
-            # Verificar colisión con pinchos
             fila, columna = self.mapa.obtener_celda(self.jugador.x, self.jugador.y)
             if 0 <= fila < len(self.mapa.niveles[self.nivel_actual]) and 0 <= columna < len(self.mapa.niveles[self.nivel_actual][0]):
                 if self.mapa.niveles[self.nivel_actual][fila][columna] == PICO:
-                    # Revertir movimiento y quitar vida
                     self.jugador.x, self.jugador.y = x_prev, y_prev
                     self.jugador.rect.center = (self.jugador.x, self.jugador.y)
                     if self.spike_timer <= 0:
@@ -111,7 +107,6 @@ class Game:
                 else:
                     self.spike_timer = 0 
 
-            # Verificar objeto robo vida
             if (self.robo_vida_x is not None and 
                 ((self.jugador.x - self.robo_vida_x)**2 + (self.jugador.y - self.robo_vida_y)**2)**0.5 < 30):
                 self.jugador.activar_poder()
