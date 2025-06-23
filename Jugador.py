@@ -27,8 +27,6 @@ class Jugador:
         self.duracion_poder = 300  
 
     def mover(self, teclas):
-
-
         if teclas[pygame.K_w]:
             self.y -= self.velocidad
             self.direccion = "arriba"
